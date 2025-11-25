@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار تفاعلي</title>
+<style>
+  :root{
+    --bg:#121212;
+    --card:#1f1f1f;
+    --accent:#4c8eff;
+    --text:#fff;
+    --muted:#ccc;
+    --radius:12px;
+  }
+  body {
+    margin:0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background:var(--bg);
+    display:flex;
+    justify-content:center;
+    padding:30px;
+    color:var(--text);
+  }
+  .container{
+    width:100%;
+    max-width:700px;
+  }
+  .card{
+    background:var(--card);
+    padding:20px;
+    border-radius:var(--radius);
+    margin-bottom:20px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.5);
+  }
+  .question{ font-size:20px; margin-bottom:12px; }
+  .choices{ display:flex; flex-direction:column; gap:10px; }
+  .choice{ background:#2b2b2b; padding:10px 12px; border-radius:8px; cursor:pointer; border:1px solid #444; transition:0.2s; }
+  .choice:hover{ background:#3a3a3a; }
+  .choice.selected{ background:linear-gradient(90deg,var(--accent),#2b6aff); border-color:var(--accent); }
+  .actions{ display:flex; justify-content:center; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .btn{ padding:10px 18px; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+  .btn-primary{ background:var(--accent); color:white; }
+  .btn-ghost{ background:transparent; color:var(--accent); border:1px solid #444; }
+  .summary{ text-align:center; padding:18px; }
+  .score{ font-size:32px; margin:10px 0; }
+  .small{ color:var(--muted); font-size:14px; }
+  @media(max-width:520px){ .question{ font-size:18px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card" id="quizArea">
+    <div class="question" id="questionText">سؤال</div>
+    <div class="choices" id="choicesList"></div>
+    <div class="actions">
+      <button id="prevBtn" class="btn btn-ghost">السابق</button>
+      <button id="nextBtn" class="btn btn-primary">التالي</button>
+    </div>
+  </div>
+
+  <div class="card" id="resultArea" style="display:none;">
+    <div class="summary">
+      <div class="small">النتيجة النهائية</div>
+      <div class="score" id="scoreText">0 / 0</div>
+      <div class="small" id="feedbackText">تشجيع</div>
+      <div style="margin-top:14px">
+        <button id="retryBtn" class="btn btn-primary">أعد المحاولة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// جلب اسم الطالب
+const userName = sessionStorage.getItem("userName") || "طالب";
+const userEmail = sessionStorage.getItem("userEmail") || "example@example.com";
+
+// الأسئلة
+const questions = [
+  {q:"عاصمة مصر هي القاهرة.", type:"tf", choices:["صح","خطأ"], correct:0},
+  {q:"أكبر كوكب في المجموعة الشمسية هو المشتري.", type:"tf", choices:["صح","خطأ"], correct:0},
+  {q:"كم عدد ألوان قوس قزح؟", type:"mc", choices:["5","6","7","8"], correct:2},
+  {q:"أقصر شهر في السنة هو فبراير.", type:"tf", choices:["صح","خطأ"], correct:0},
+  {q:"ما هي اللغة الرسمية في البرازيل؟", type:"mc", choices:["البرتغالية","الإسبانية","الإنجليزية","الفرنسية"], correct:0},
+  {q:"الضوء ينتقل أسرع من الصوت.", type:"tf", choices:["صح","خطأ"], correct:0},
+  {q:"كم عدد القارات في العالم؟", type:"mc", choices:["5","6","7","8"], correct:2},
+  {q:"البرمجة هي عملية كتابة الأوامر للحاسوب.", type:"tf", choices:["صح","خطأ"], correct:0},
+  {q:"أي من الحيوانات التالية ثدييات؟", type:"mc", choices:["التمساح","الحوت","السلحفاة","الخفاش"], correct:1},
+  {q:"الشمس تدور حول الأرض.", type:"tf", choices:["صح","خطأ"], correct:1}
+];
+
+let index=0;
+let answers=new Array(questions.length).fill(null);
+
+// عناصر DOM
+const qText=document.getElementById('questionText');
+const choicesList=document.getElementById('choicesList');
+const prevBtn=document.getElementById('prevBtn');
+const nextBtn=document.getElementById('nextBtn');
+const quizArea=document.getElementById('quizArea');
+const resultArea=document.getElementById('resultArea');
+const scoreText=document.getElementById('scoreText');
+const feedbackText=document.getElementById('feedbackText');
+
+function renderQuestion(i){
+  const item=questions[i];
+  qText.textContent=`السؤال ${i+1}: ${item.q}`;
+  choicesList.innerHTML='';
+  item.choices.forEach((c,ci)=>{
+    const d=document.createElement('div');
+    d.className='choice';
+    d.dataset.index=ci;
+    d.innerText=c;
+    if(answers[i]===ci) d.classList.add('selected');
+    d.addEventListener('click',()=>selectChoice(ci));
+    choicesList.appendChild(d);
+  });
+  prevBtn.disabled=(i===0);
+  nextBtn.textContent=(i===questions.length-1)?'إرسال':'التالي';
+}
+
+function selectChoice(ci){
+  answers[index]=ci;
+  Array.from(choicesList.children).forEach(ch=>{
+    ch.classList.toggle('selected',Number(ch.dataset.index)===ci);
+  });
+}
+
+prevBtn.addEventListener('click',()=>{
+  if(index>0) index--;
+  renderQuestion(index);
+});
+
+nextBtn.addEventListener('click',()=>{
+  if(index<questions.length-1){
+    index++;
+    renderQuestion(index);
+  }else{
+    finishQuiz();
+  }
+});
+
+function finishQuiz(){
+  let score=0;
+  for(let i=0;i<questions.length;i++){
+    if(answers[i]===questions[i].correct) score++;
+  }
+  scoreText.innerText=`${score} / ${questions.length}`;
+  feedbackText.innerText=(score===questions.length)?'ممتاز! كل الإجابات صحيحة 🎉':(score>=7?'جيد جدا 👍':'حاولي مرة أخرى ✨');
+
+  // حفظ المحاولة في ملف TXT
+  const now=new Date();
+  const dateStr=`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}`;
+  let content=`الاسم: ${userName}\nالبريد: ${userEmail}\nالتاريخ: ${dateStr}\n\nالنتائج:\n`;
+  questions.forEach((q,i)=>{
+    const ans=answers[i]!==null?questions[i].choices[answers[i]]:"لم يجيب";
+    content+=`${i+1}. ${q.q}\nإجابتك: ${ans}\nصحيحة: ${q.choices[q.correct]}\n\n`;
+  });
+  const blob=new Blob([content],{type:"text/plain"});
+  const link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);
+  link.download=`${userName}_${dateStr}.txt`;
+  link.click();
+
+  quizArea.style.display='none';
+  resultArea.style.display='block';
+}
+
+document.getElementById('retryBtn').addEventListener('click',()=>{
+  answers=new Array(questions.length).fill(null);
+  index=0;
+  quizArea.style.display='block';
+  resultArea.style.display='none';
+  renderQuestion(index);
+});
+
+// بدء الاختبار
+renderQuestion(0);
+</script>
+</body>
+</html>

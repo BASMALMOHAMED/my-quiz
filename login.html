@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول - اختبار تفاعلي</title>
+<style>
+  body {
+    margin:0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background:#121212;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+  }
+  .login-box {
+    background:#1f1f1f;
+    padding:30px;
+    border-radius:12px;
+    width:320px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    text-align:center;
+  }
+  h2 { margin-bottom:20px; }
+  input {
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
+    border:none;
+    font-size:16px;
+  }
+  button {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border:none;
+    border-radius:8px;
+    background:linear-gradient(90deg,#4c8eff,#2b6aff);
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  button:hover { opacity:0.9; }
+</style>
+</head>
+<body>
+<div class="login-box">
+  <h2>تسجيل الدخول</h2>
+  <input type="text" id="name" placeholder="اسمك الكامل" required>
+  <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+  <button onclick="goToQuiz()">دخول</button>
+</div>
+
+<script>
+function goToQuiz(){
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  if(name === "" || email === ""){
+    alert("من فضلك املئي الاسم والبريد الإلكتروني");
+    return;
+  }
+  // حفظ بيانات المستخدم في sessionStorage
+  sessionStorage.setItem("userName", name);
+  sessionStorage.setItem("userEmail", email);
+  // الانتقال لصفحة الاختبار
+  window.location.href = "quiz.html";
+}
+</script>
+</body>
+</html>
