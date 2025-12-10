@@ -4,224 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بيئات التعلم الافتراضية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #4e54c8; --secondary: #8f94fb; --accent: #ff9f43; }
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #a7c5eb, #4a69bd); /* الخلفية الزرقاء */
-            margin: 0; padding: 0; min-height: 100vh; color: #333;
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        /* شاشة الدخول */
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-gradient);
+            margin: 0; padding: 0; min-height: 100vh;
+            color: #333; overflow-x: hidden;
+        }
+
+        /* --- شاشة الدخول --- */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px);
             display: flex; justify-content: center; align-items: center; z-index: 2000;
         }
-        .login-box {
-            background: white; width: 90%; max-width: 450px; padding: 40px; border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center;
+        .login-card {
+            background: rgba(255, 255, 255, 0.95); padding: 50px; border-radius: 20px;
+            width: 90%; max-width: 500px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
-        .input-field {
-            width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px;
-            background: #f8f9fa; margin-bottom: 15px; font-family: 'Cairo'; text-align: right; box-sizing: border-box;
-        }
-        .btn-start {
-            width: 100%; padding: 15px; border-radius: 10px; border: none; font-family: 'Cairo';
-            cursor: pointer; font-size: 1.1rem; background: var(--primary); color: white; font-weight: bold;
-            transition: 0.2s;
-        }
-        .btn-start:hover { background: #3b40a3; transform: scale(1.02); }
-
-        /* المحتوى الرئيسي */
-        #main-content { display: none; padding-bottom: 50px; }
-        header { background: white; color: var(--primary); padding: 20px; text-align: center; border-radius: 0 0 30px 30px; margin-bottom: 20px; }
+        .login-card h1 { color: var(--accent); margin-bottom: 10px; }
+        .login-card i { font-size: 50px; color: var(--accent); margin-bottom: 20px; }
         
-        .nav-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .custom-input {
+            width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #eee;
+            border-radius: 10px; font-family: 'Tajawal'; font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .custom-input:focus { border-color: var(--accent); transform: scale(1.02); }
+        
+        .btn-main {
+            width: 100%; padding: 15px; border: none; border-radius: 10px;
+            background: var(--accent); color: white; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; transition: 0.3s; font-family: 'Tajawal';
+        }
+        .btn-main:hover { background: #2980b9; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3); }
+
+        /* --- المحتوى الرئيسي --- */
+        #main-content { display: none; padding-bottom: 60px; }
+        
+        /* الهيدر */
+        header {
+            background: rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; color: white;
+            backdrop-filter: blur(5px);
+        }
+        .user-info span { font-weight: bold; font-size: 1.2rem; }
+
+        /* الأزرار العلوية */
+        .nav-container {
+            display: flex; justify-content: center; gap: 15px; padding: 30px 10px; flex-wrap: wrap;
+        }
         .nav-btn {
-            background: rgba(255,255,255,0.8); border: none; padding: 10px 20px; font-family: 'Cairo';
-            border-radius: 20px; cursor: pointer; color: #555; transition: 0.3s;
+            background: white; border: none; padding: 12px 25px; border-radius: 50px;
+            font-family: 'Tajawal'; font-weight: bold; color: #555; cursor: pointer;
+            transition: 0.3s; display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        .nav-btn.active { background: var(--primary); color: white; }
+        .nav-btn i { font-size: 1.1rem; }
+        .nav-btn:hover { transform: translateY(-3px); }
+        .nav-btn.active { background: var(--accent); color: white; box-shadow: 0 10px 20px rgba(52, 152, 219, 0.4); }
 
-        .content-section { display: none; max-width: 800px; margin: 0 auto; padding: 0 20px; animation: fadeIn 0.5s; }
+        /* تنسيق الأقسام */
+        .content-section { display: none; max-width: 1000px; margin: 0 auto; padding: 0 20px; animation: slideUp 0.6s ease; }
         .content-section.active-section { display: block; }
-        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
-
-        .card { background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px; border-right: 5px solid var(--accent); }
-        .card h3 { margin-top: 0; color: var(--primary); }
-        .card ul { line-height: 1.8; padding-right: 20px; }
-
-        /* الاختبار */
-        .question-box { margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 10px; }
-        .quiz-option { display: block; padding: 10px; background: #f4f6f8; margin: 5px 0; border-radius: 8px; cursor: pointer; }
-        .quiz-option:hover { background: #e2e6ea; }
-        .result-box { padding: 20px; text-align: center; font-weight: bold; display: none; border-radius: 10px; margin-top: 20px; background: white; }
-    </style>
-</head>
-<body>
-
-    <div id="login-screen">
-        <div class="login-box">
-            <h2 style="color: #4e54c8; margin-bottom: 5px;">مرحباً بك 👋</h2>
-            <p style="color: #777; margin-bottom: 20px;">بيئات التعلم الافتراضية</p>
-            
-            <input type="text" id="sName" class="input-field" placeholder="اكتب اسمك هنا">
-            <input type="email" id="sEmail" class="input-field" placeholder="البريد الإلكتروني">
-            
-            <button class="btn-start" onclick="enterCourse()">بدء المقرر الدراسي</button>
-            <p id="error-msg" style="color: red; display: none; margin-top: 10px; font-size: 0.9rem;">الرجاء كتابة الاسم والبريد!</p>
-        </div>
-    </div>
-
-    <div id="main-content">
-        <header>
-            <h1 id="welcome-msg">أهلاً بك</h1>
-        </header>
-
-        <div class="nav-container">
-            <button class="nav-btn active" onclick="showTab('goals', this)">الأهداف</button>
-            <button class="nav-btn" onclick="showTab('content', this)">المحتوى</button>
-            <button class="nav-btn" onclick="showTab('activities', this)">الأنشطة</button>
-            <button class="nav-btn" onclick="showTab('quiz', this)">الاختبار</button>
-        </div>
-
-        <div id="goals" class="content-section active-section">
-            <div class="card">
-                <h3>أهداف المحتوى</h3>
-                <ul>
-                    <li>محاكاة التجارب الخطيرة والمعقدة (مثل استكشاف الذرة).</li>
-                    <li>توفير تجارب غنية وواقعية ثلاثية الأبعاد.</li>
-                    <li>تكرار التجارب بلا حدود وبأمان.</li>
-                    <li>تخصيص التعلم وتجاوز القيود الجغرافية.</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>الأهداف التطويرية</h3>
-                <ul>
-                    <li>تعزيز التفاعل والاندماج (Gamification).</li>
-                    <li>تطوير مهارات التفاعل الإلكتروني.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div id="content" class="content-section">
-            <div class="card">
-                <h3>المحتوى النظري</h3>
-                <ul>
-                    <li>مفاهيم بيئات التعلم الافتراضية وتطورها.</li>
-                    <li>مميزات وسلبيات الاستخدام وأنواع البيئات.</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>المحتوى العملي</h3>
-                <ul>
-                    <li>التدريب على Moodle و Blackboard.</li>
-                    <li>تصميم وتطوير المواد للبيئات الافتراضية.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div id="activities" class="content-section">
-            <div class="card">
-                <h3>أنشطة تفاعلية</h3>
-                <ul>
-                    <li>تصميم سيناريو تعليمي.</li>
-                    <li>مناقشات جماعية وكسر الجمود.</li>
-                    <li>الألعاب التعليمية (Serious Games).</li>
-                </ul>
-            </div>
-        </div>
-
-        <div id="quiz" class="content-section">
-            <div class="card">
-                <h3>اختبار المعلومات</h3>
-                <div id="quiz-questions"></div>
-                <button class="btn-start" onclick="checkAnswers()" style="margin-top: 20px;">تصحيح النتيجة</button>
-                <div id="result" class="result-box"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // دالة الدخول (مبسطة جداً لضمان العمل)
-        function enterCourse() {
-            var name = document.getElementById('sName').value;
-            var email = document.getElementById('sEmail').value;
-
-            if (!name || !email) {
-                document.getElementById('error-msg').style.display = 'block';
-                return;
-            }
-
-            // إخفاء الدخول وإظهار المحتوى فوراً
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            document.getElementById('welcome-msg').innerText = "أهلاً، " + name;
+        
+        .section-title {
+            text-align: center; color: white; font-size: 2rem; margin-bottom: 30px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        // التنقل بين التبويبات
-        function showTab(id, btn) {
-            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active-section'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(id).classList.add('active-section');
-            btn.classList.add('active');
+        /* تنسيق البطاقات (Cards) */
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
         }
-
-        // أسئلة الاختبار
-        const questions = [
-            { t: "يعتمد التعليم الإلكتروني على التفاعل بين المعلم والطلاب.", a: "true", type: "tf" },
-            { t: "من أدوات التعليم المتزامن:", opts: ["البريد", "الفصول الافتراضية", "الأقراص"], c: 1, type: "mc" },
-            { t: "يسمى النموذج الخالص بالنموذج المكمل.", a: "false", type: "tf" },
-            { t: "المتاحف الافتراضية مكلفة جداً وصعبة التحديث.", a: "false", type: "tf" },
-            { t: "الفصل الافتراضي يحتوي مكونات الفصل لكن بلا مكان واقعي.", a: "true", type: "tf" }
-        ];
-
-        // بناء الاختبار
-        const qContainer = document.getElementById('quiz-questions');
-        questions.forEach((q, i) => {
-            let html = `<div class="question-box" id="q${i}"><p><strong>${i+1}. ${q.t}</strong></p>`;
-            if(q.type == "tf") {
-                html += `<label class="quiz-option"><input type="radio" name="q${i}" value="true"> صح</label>
-                         <label class="quiz-option"><input type="radio" name="q${i}" value="false"> خطأ</label>`;
-            } else {
-                q.opts.forEach((opt, idx) => {
-                    html += `<label class="quiz-option"><input type="radio" name="q${i}" value="${idx}"> ${opt}</label>`;
-                });
-            }
-            qContainer.innerHTML += html + "</div>";
-        });
-
-        // تصحيح الاختبار
-        function checkAnswers() {
-            let score = 0;
-            questions.forEach((q, i) => {
-                const selected = document.querySelector(`input[name="q${i}"]:checked`);
-                const box = document.getElementById(`q${i}`);
-                
-                let isCorrect = false;
-                if (selected) {
-                    if (q.type == "tf" && selected.value == q.a) isCorrect = true;
-                    if (q.type == "mc" && selected.value == q.c) isCorrect = true;
-                }
-
-                if (isCorrect) {
-                    score++;
-                    box.style.borderRight = "5px solid #2ecc71"; // أخضر
-                    box.style.background = "#eafaf1";
-                } else {
-                    box.style.borderRight = "5px solid #e74c3c"; // أحمر
-                    box.style.background = "#fadbd8";
-                }
-            });
-
-            const res = document.getElementById('result');
-            res.style.display = 'block';
-            res.innerText = `النتيجة: ${score} من ${questions.length}`;
-            res.style.color = score >= 3 ? 'green' : 'red';
-        }
-    </script>
-</body>
-</html>
+        .card {
+            background: white; padding: 25px; border-radius: 15px; position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.
