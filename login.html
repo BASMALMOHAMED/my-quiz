@@ -1,74 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تسجيل الدخول - اختبار تفاعلي</title>
-<style>
-  body {
-    margin:0;
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    background:#121212;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    color:white;
-  }
-  .login-box {
-    background:#1f1f1f;
-    padding:30px;
-    border-radius:12px;
-    width:320px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.4);
-    text-align:center;
-  }
-  h2 { margin-bottom:20px; }
-  input {
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-    border-radius:8px;
-    border:none;
-    font-size:16px;
-  }
-  button {
-    width:100%;
-    padding:12px;
-    margin-top:12px;
-    border:none;
-    border-radius:8px;
-    background:linear-gradient(90deg,#4c8eff,#2b6aff);
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    font-weight:600;
-  }
-  button:hover { opacity:0.9; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>دخول - مقرر بيئات التعلم الافتراضية</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="login-box">
-  <h2>تسجيل الدخول</h2>
-  <input type="text" id="name" placeholder="اسمك الكامل" required>
-  <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-  <button onclick="goToQuiz()">دخول</button>
-</div>
+  <main class="center-page">
+    <div class="card glass-card login-card">
+      <div class="brand">
+        <div class="logo-circle" aria-hidden></div>
+        <h1>مقرر: بيئات التعلم الافتراضية</h1>
+      </div>
 
-<script>
-function goToQuiz(){
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  if(name === "" || email === ""){
-    alert("من فضلك املئي الاسم والبريد الإلكتروني");
-    return;
-  }
-  // حفظ بيانات المستخدم في sessionStorage
-  sessionStorage.setItem("userName", name);
-  sessionStorage.setItem("userEmail", email);
-  // الانتقال لصفحة الاختبار
-  window.location.href = "quiz.html";
-}
-</script>
+      <p class="muted">أدخلي اسمك والبريد للبدء</p>
+
+      <form id="loginForm" class="form" autocomplete="off">
+        <label class="field">
+          <span>الاسم</span>
+          <input id="studentName" type="text" placeholder="مثال: بسمله محمد" required>
+        </label>
+        <label class="field">
+          <span>البريد الإلكتروني</span>
+          <input id="studentEmail" type="email" placeholder="name@example.com" required>
+        </label>
+
+        <div class="actions">
+          <button id="startBtn" type="submit" class="btn btn-glow">ابدأ الاختبار</button>
+        </div>
+
+        <p class="small muted">سيتم حفظ محاولتك على جهازك بعد الإرسال كملف نصي.</p>
+      </form>
+    </div>
+
+    <footer class="footer-note">نسخة تعليمية — مصمّم بأسلوب Soft Modern</footer>
+  </main>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('studentName').value.trim();
+      const email = document.getElementById('studentEmail').value.trim();
+      if(!name || !email) return alert('من فضلك املئي الاسم والبريد.');
+      localStorage.setItem('quiz_student_name', name);
+      localStorage.setItem('quiz_student_email', email);
+      if(!localStorage.getItem('quiz_attempts')) localStorage.setItem('quiz_attempts', JSON.stringify([]));
+      window.location.href = 'quiz.html';
+    });
+  </script>
 </body>
 </html>
