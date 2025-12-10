@@ -90,4 +90,267 @@
         }
         .card {
             background: white; padding: 25px; border-radius: 15px; position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-10px); }
+        .card::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 5px; height: 100%;
+            background: var(--accent);
+        }
+        .card h3 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .card h3 i { color: var(--accent); }
+        .card ul { padding-right: 20px; color: #555; line-height: 1.7; }
+        .card li { margin-bottom: 8px; }
+
+        /* تنسيق الاختبار */
+        .quiz-wrapper { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        .q-box { margin-bottom: 25px; padding: 20px; border: 1px solid #eee; border-radius: 12px; background: #f9f9f9; }
+        .q-text { font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; display: block; color: #2c3e50; }
+        .q-option {
+            display: block; padding: 12px; background: white; margin-bottom: 8px; border-radius: 8px;
+            border: 1px solid #ddd; cursor: pointer; transition: 0.2s;
+        }
+        .q-option:hover { background: #eaf2f8; border-color: var(--accent); }
+        .q-option input { margin-left: 10px; }
+        
+        .result-popup {
+            background: var(--primary); color: white; padding: 20px; border-radius: 10px;
+            text-align: center; margin-top: 20px; display: none; font-size: 1.3rem;
+        }
+
+        /* Animations */
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        /* ألوان خاصة للبطاقات */
+        .card.tech::before { background: var(--warning); }
+        .card.dev::before { background: var(--success); }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <i class="fas fa-graduation-cap"></i>
+            <h1>بيئات التعلم الافتراضية</h1>
+            <p>منصة تعليمية تفاعلية شاملة</p>
+            <input type="text" id="username" class="custom-input" placeholder="اسم الطالب الثلاثي">
+            <input type="email" id="email" class="custom-input" placeholder="البريد الإلكتروني">
+            <button class="btn-main" onclick="enterSite()">تسجيل الدخول <i class="fas fa-arrow-left"></i></button>
+            <p id="error" style="color: red; display: none; margin-top: 10px;">يرجى ملء جميع البيانات!</p>
+        </div>
+    </div>
+
+    <div id="main-content">
+        
+        <header>
+            <div class="logo"><i class="fas fa-cube"></i> VLE Platform</div>
+            <div class="user-info">مرحباً، <span id="display-name">طالب</span></div>
+        </header>
+
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="showTab('goals', this)"><i class="fas fa-bullseye"></i> الأهداف</button>
+            <button class="nav-btn" onclick="showTab('content', this)"><i class="fas fa-book-open"></i> المحتوى</button>
+            <button class="nav-btn" onclick="showTab('activities', this)"><i class="fas fa-laptop-code"></i> الأنشطة</button>
+            <button class="nav-btn" onclick="showTab('quiz', this)"><i class="fas fa-clipboard-check"></i> الاختبار</button>
+        </div>
+
+        <div id="goals" class="content-section active-section">
+            <h2 class="section-title">أهداف المقرر</h2>
+            <div class="grid-container">
+                <div class="card">
+                    <h3><i class="fas fa-flask"></i> أهداف المحتوى</h3>
+                    <ul>
+                        <li>محاكاة التجارب الخطيرة (الذرة، جسم الإنسان).</li>
+                        <li>توفير تجارب غنية وواقعية 3D.</li>
+                        <li>تكرار التجارب بأمان وحماية المتعلم.</li>
+                        <li>تخصيص التعلم وتجاوز القيود الجغرافية.</li>
+                    </ul>
+                </div>
+                <div class="card dev">
+                    <h3><i class="fas fa-user-graduate"></i> الأهداف التطويرية</h3>
+                    <ul>
+                        <li>تعزيز التفاعل والاندماج (Gamification).</li>
+                        <li>تطوير مهارات التفاعل الإلكتروني.</li>
+                        <li>توفير بيئة داعمة للتواصل بين الجميع.</li>
+                    </ul>
+                </div>
+                <div class="card tech">
+                    <h3><i class="fas fa-cogs"></i> الأهداف التقنية</h3>
+                    <ul>
+                        <li>عزل المشاريع ومنع تعارض الحزم.</li>
+                        <li>زيادة قابلية النقل بين الأجهزة المختلفة.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="content" class="content-section">
+            <h2 class="section-title">المحتوى الدراسي</h2>
+            <div class="grid-container">
+                <div class="card" style="border-top: 5px solid var(--accent);">
+                    <h3><i class="fas fa-scroll"></i> المحتوى النظري</h3>
+                    <p>المفاهيم الأساسية، التطور التاريخي، أسباب الاستخدام، الوظائف، الخصائص، المميزات والسلبيات، الأنواع، ونماذج التطبيق وتأمين الخصوصية.</p>
+                </div>
+                <div class="card" style="border-top: 5px solid var(--success);">
+                    <h3><i class="fas fa-desktop"></i> المحتوى العملي</h3>
+                    <p>التدريب على الأدوات، بيئات المصدر المفتوح، نظم إدارة التعلم (Moodle, Blackboard)، ومهارات التصميم والتطوير.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="activities" class="content-section">
+            <h2 class="section-title">الأنشطة التفاعلية</h2>
+            <div class="grid-container">
+                <div class="card">
+                    <h3><i class="fas fa-pencil-ruler"></i> التصميم والتطوير</h3>
+                    <ul>
+                        <li>تصميم سيناريو (Gamification).</li>
+                        <li>إنشاء بيئة تلعيب كاملة.</li>
+                        <li>تطوير محتوى تفاعلي (فيديو، أيقونات).</li>
+                    </ul>
+                </div>
+                <div class="card dev">
+                    <h3><i class="fas fa-users"></i> التنفيذ والتفاعل</h3>
+                    <ul>
+                        <li>كسر الجمود (قصص شخصية).</li>
+                        <li>المناقشات الجماعية.</li>
+                        <li>الألعاب التعليمية (Serious Games).</li>
+                        <li>المحاكاة وتمثيل الأدوار.</li>
+                    </ul>
+                </div>
+                <div class="card tech">
+                    <h3><i class="fas fa-chart-line"></i> التقييم والملاحظة</h3>
+                    <ul>
+                        <li>الاختبارات التحصيلية.</li>
+                        <li>بطاقات ملاحظة الأداء المهاري.</li>
+                        <li>مقاييس الدافعية والاستمتاع.</li>
+                    </ul>
+                </div>
+                 <div class="card">
+                    <h3><i class="fas fa-star"></i> أهداف الأنشطة</h3>
+                    <ul>
+                        <li>تنمية التفكير النقدي وحل المشكلات.</li>
+                        <li>بناء الثقة وتعزيز التواصل.</li>
+                        <li>توفير تجربة ممتعة وتطوير الكفاءات.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz" class="content-section">
+            <h2 class="section-title">الاختبار النهائي</h2>
+            <div class="quiz-wrapper">
+                <div id="questions-container"></div>
+                <button class="btn-main" onclick="submitQuiz()" style="margin-top: 20px;">عرض النتيجة</button>
+                <div id="result-box" class="result-popup"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. منطق الدخول
+        function enterSite() {
+            const name = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            
+            if(name === "" || email === "") {
+                document.getElementById('error').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('display-name').innerText = name;
+        }
+
+        // 2. التنقل بين التبويبات
+        function showTab(id, btn) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(id).classList.add('active-section');
+            btn.classList.add('active');
+        }
+
+        // 3. بيانات الاختبار (13 سؤال كاملة)
+        const questions = [
+            { text: "يعتمد التعليم الإلكتروني على التفاعل بين المعلم والطلاب.", type: "tf", correct: "true" },
+            { text: "من أدوات التعليم المتزامن:", type: "mc", options: ["البريد الالكتروني", "القوائم البريدية", "الاقراص المدمجة", "الفصول الافتراضية"], correct: 3 },
+            { text: "يسمى النموذج الخالص للتعليم الإلكتروني بالنموذج المكمل.", type: "tf", correct: "false" },
+            { text: "كل مما يلي من منصات الفصول الافتراضية عدا:", type: "mc", options: ["Dream weaver", "Web ex", "Teams", "Zoom"], correct: 0 },
+            { text: "يتيح التعليم الإلكتروني فرص لكل الفئات العمرية.", type: "tf", correct: "true" },
+            { text: "كل مما يلي من أجهزة قراءة الكتاب الإلكتروني عدا:", type: "mc", options: ["القارئات اليدوية", "القارئات المحمولة", "الاقلام الضوئية", "الاجهزة المكتبية"], correct: 2 },
+            { text: "تحتاج المتاحف الافتراضية إلى تكلفة عالية ويصعب تحديثها.", type: "tf", correct: "false" },
+            { text: "يقوم المعرض الافتراضي بترجمة جوهر الأشياء المادية للعالم الرقمي.", type: "tf", correct: "true" },
+            { text: "يوصف الفصل الافتراضي بأنه فصل بكل المكونات لكن بدون مكان واقعي.", type: "tf", correct: "true" },
+            { text: "يتم تحديد الوزارات والمؤسسات التي تطبق التعليم الإلكتروني لإدخاله.", type: "tf", correct: "true" },
+            { text: "تقدم بيئة التعلم التكيفية المحتوى بطريقة واحدة لجميع المتعلمين.", type: "tf", correct: "false" },
+            { text: "يتطلب بناء بيئة التعلم التكيفية استخدام الذكاء الاصطناعي.", type: "tf", correct: "true" },
+            { text: "يحصل المتعلم في التعليم غير المباشر على المحتوى وقتما أراد.", type: "tf", correct: "true" }
+        ];
+
+        // 4. توليد الأسئلة
+        const qContainer = document.getElementById('questions-container');
+        questions.forEach((q, index) => {
+            let html = `<div class="q-box" id="q-${index}"><span class="q-text">${index+1}. ${q.text}</span>`;
+            
+            if(q.type === 'tf') {
+                html += `
+                    <label class="q-option"><input type="radio" name="q${index}" value="true"> صح ✅</label>
+                    <label class="q-option"><input type="radio" name="q${index}" value="false"> خطأ ❌</label>
+                `;
+            } else {
+                q.options.forEach((opt, i) => {
+                    html += `<label class="q-option"><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`;
+                });
+            }
+            html += `</div>`;
+            qContainer.innerHTML += html;
+        });
+
+        // 5. تصحيح الاختبار
+        function submitQuiz() {
+            let score = 0;
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const box = document.getElementById(`q-${index}`);
+                
+                // إعادة التنسيق
+                box.style.border = "1px solid #ddd";
+                box.style.backgroundColor = "#f9f9f9";
+
+                if(selected) {
+                    // التحقق من الإجابة
+                    let isCorrect = false;
+                    if(q.type === 'tf' && selected.value === q.correct) isCorrect = true;
+                    if(q.type === 'mc' && parseInt(selected.value) === q.correct) isCorrect = true;
+
+                    if(isCorrect) {
+                        score++;
+                        box.style.border = "2px solid #27ae60";
+                        box.style.backgroundColor = "#e8f8f5";
+                    } else {
+                        box.style.border = "2px solid #e74c3c";
+                        box.style.backgroundColor = "#fdedec";
+                    }
+                }
+            });
+
+            const resultBox = document.getElementById('result-box');
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `النتيجة النهائية: ${score} من ${questions.length}`;
+            
+            if(score >= 7) {
+                resultBox.style.background = "#27ae60";
+                resultBox.innerHTML += "<br> ممتاز! أحسنت صنعاً 🌟";
+            } else {
+                resultBox.style.background = "#e74c3c";
+                resultBox.innerHTML += "<br> حظ أوفر، حاول مرة أخرى 💪";
+            }
+            resultBox.scrollIntoView({behavior: "smooth"});
+        }
+    </script>
+</body>
+</html>
