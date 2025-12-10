@@ -10,379 +10,201 @@
             --primary: #4e54c8;
             --secondary: #8f94fb;
             --accent: #ff9f43;
-            --text: #333;
-            --bg: #f4f6f9;
+            --bg: #f0f4f8;
         }
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg);
-            margin: 0;
-            padding: 0;
-            color: var(--text);
-        }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; padding: 0; height: 100vh; }
 
-        /* الهيدر */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        /* --- تنسيق شاشة الدخول (Login Screen) --- */
+        #login-screen {
+            display: flex; justify-content: center; align-items: center; height: 100vh; width: 100%;
+            position: fixed; top: 0; left: 0; background: #eef2f5; z-index: 999;
         }
-        header h1 { margin: 0; font-size: 2.5rem; }
-        header p { font-size: 1.2rem; opacity: 0.9; }
-
-        /* التبويبات (الأزرار العلوية) */
-        .nav-container {
-            display: flex;
-            justify-content: center;
-            background: white;
-            padding: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        .login-card {
+            background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center; width: 90%; max-width: 500px;
         }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            padding: 15px 25px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            color: #555;
-            border-bottom: 3px solid transparent;
+        .login-card h2 { color: #333; margin-bottom: 10px; }
+        .login-card p { color: #777; margin-bottom: 30px; }
+        .input-group { margin-bottom: 20px; text-align: right; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        .input-group input {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;
+            font-family: 'Cairo'; outline: none; transition: 0.3s; box-sizing: border-box;
         }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.1); }
+        
+        .btn-next {
+            background: var(--primary); color: white; border: none; padding: 12px 40px;
+            border-radius: 10px; font-size: 1.1rem; cursor: pointer; font-family: 'Cairo'; transition: 0.3s; width: 100%;
+        }
+        .btn-next:hover { background: #3b40a3; }
 
-        .nav-btn:hover { color: var(--primary); background: #f0f0f5; border-radius: 5px; }
+        /* --- تنسيق المحتوى الرئيسي (Main Content) --- */
+        #main-content { display: none; /* مخفي في البداية */ }
+        
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px; text-align: center; }
+        .nav-container { display: flex; justify-content: center; background: white; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+        .nav-btn { background: none; border: none; padding: 15px 25px; font-family: 'Cairo'; font-size: 1.1rem; cursor: pointer; transition: 0.3s; color: #555; border-bottom: 3px solid transparent; }
+        .nav-btn:hover { color: var(--primary); background: #f0f0f5; }
         .nav-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); font-weight: bold; }
-
-        /* المحتوى الرئيسي */
-        .content-section {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 20px;
-            display: none; /* إخفاء الأقسام افتراضياً */
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
+        
+        .content-section { max-width: 900px; margin: 30px auto; padding: 20px; display: none; animation: fadeIn 0.5s ease-in-out; }
         .content-section.active-section { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* البطاقات (Cards) للأهداف والأنشطة */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 5px solid var(--primary); }
+        .card h3 { margin-top: 0; color: var(--primary); }
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-right: 5px solid var(--primary);
-            transition: transform 0.3s;
-        }
-
-        .card:hover { transform: translateY(-5px); }
-        .card h3 { color: var(--primary); margin-top: 0; }
-        .card ul { padding-right: 20px; }
-        .card li { margin-bottom: 8px; line-height: 1.6; }
-
-        /* تصميم قسم المحتوى (نظري وعملي) */
-        .content-box {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-        }
-        .tag {
-            display: inline-block;
-            padding: 5px 15px;
-            background: var(--accent);
-            color: white;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-
-        /* تصميم الاختبار */
-        .quiz-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .question-box { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-        .question-text { font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; display: block; }
-        .options label { display: block; padding: 10px; background: #f8f9fa; margin: 5px 0; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        .options label:hover { background: #e9ecef; }
-        .options input { margin-left: 10px; }
-        
-        button.submit-btn {
-            background: var(--primary); color: white; border: none; padding: 15px 30px; font-size: 1.2rem;
-            border-radius: 8px; cursor: pointer; width: 100%; margin-top: 20px; font-family: 'Cairo';
-        }
-        button.submit-btn:hover { background: #3b40a3; }
-        
-        .result-box {
-            margin-top: 20px; padding: 20px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 1.3rem; display: none;
-        }
+        /* تنسيق الاختبار */
+        .quiz-container { background: white; padding: 30px; border-radius: 12px; }
+        .question-box { margin-bottom: 20px; padding: 15px; border-bottom: 1px solid #eee; }
+        .options label { display: block; padding: 10px; background: #f9f9f9; margin: 5px 0; border-radius: 8px; cursor: pointer; }
+        .options label:hover { background: #eef2ff; }
+        .result-box { margin-top: 20px; padding: 20px; border-radius: 8px; text-align: center; font-weight: bold; display: none; }
         .pass { background: #d4edda; color: #155724; }
         .fail { background: #f8d7da; color: #721c24; }
-
     </style>
 </head>
 <body>
 
-<header>
-    <h1>بيئات التعلم الافتراضية</h1>
-    <p>مقرر تفاعلي شامل: الأهداف، المحتوى، الأنشطة، والتقييم</p>
-</header>
+    <div id="login-screen">
+        <div class="login-card">
+            <div style="background: #a0c4ff; width: 60px; height: 60px; border-radius: 10px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                🎓
+            </div>
+            <h2>مقرر: بيئات التعلم الافتراضية</h2>
+            <p>أهلاً بك، الرجاء تسجيل بياناتك للدخول</p>
+            
+            <div class="input-group">
+                <label>اسم الطالب (ثلاثي):</label>
+                <input type="text" id="studentName" placeholder="اكتب اسمك هنا...">
+            </div>
+            
+            <div class="input-group">
+                <label>البريد الإلكتروني:</label>
+                <input type="email" id="studentEmail" placeholder="example@mail.com">
+            </div>
 
-<div class="nav-container">
-    <button class="nav-btn active" onclick="showSection('goals')">🎯 الأهداف</button>
-    <button class="nav-btn" onclick="showSection('content')">📚 المحتوى</button>
-    <button class="nav-btn" onclick="showSection('activities')">💡 الأنشطة</button>
-    <button class="nav-btn" onclick="showSection('quiz')">📝 الاختبار</button>
-</div>
-
-<div id="goals" class="content-section active-section">
-    <h2 style="text-align: center; color: var(--primary);">أهداف المقرر</h2>
-    <div class="cards-grid">
-        <div class="card">
-            <h3>أهداف المحتوى</h3>
-            <ul>
-                <li><strong>محاكاة التجارب الخطيرة:</strong> إجراء تجارب آمنة (استكشاف الذرة، جسم الإنسان).</li>
-                <li><strong>توفير تجارب غنية:</strong> استكشاف عوالم 3D لتعميق الفهم.</li>
-                <li><strong>تكرار التجارب:</strong> إعادة المحاولة بلا حدود وبلا مخاطر.</li>
-                <li><strong>تخصيص التعلم:</strong> منح المتعلم السيطرة على مساره التعليمي.</li>
-                <li><strong>تجاوز القيود الجغرافية:</strong> التعلم من أي مكان.</li>
-            </ul>
-        </div>
-        <div class="card" style="border-right-color: var(--accent);">
-            <h3>الأهداف التطويرية والشخصية</h3>
-            <ul>
-                <li><strong>تعزيز التفاعل:</strong> استخدام التلعيب (Gamification).</li>
-                <li><strong>تطوير المهارات:</strong> مثل التنور التاريخي والتفاعل الإلكتروني.</li>
-                <li><strong>بيئة داعمة:</strong> تسهيل التواصل بين الطالب والمعلم وولي الأمر.</li>
-            </ul>
-        </div>
-        <div class="card" style="border-right-color: #28a745;">
-            <h3>الأهداف التقنية (برمجة)</h3>
-            <ul>
-                <li><strong>عزل المشاريع:</strong> منع تعارض الحزم البرمجية.</li>
-                <li><strong>زيادة قابلية النقل:</strong> سهولة نقل المشاريع بين الأجهزة.</li>
-            </ul>
+            <button class="btn-next" onclick="startLearning()">التالي &larr;</button>
+            <p id="error-msg" style="color: red; font-size: 0.9rem; margin-top: 10px; display: none;">الرجاء إدخال الاسم والبريد الإلكتروني</p>
         </div>
     </div>
-</div>
 
-<div id="content" class="content-section">
-    <h2 style="text-align: center; color: var(--primary);">محتوى المقرر</h2>
-    
-    <div class="content-box">
-        <span class="tag">المحتوى النظري</span>
-        <p>يتناول هذا الجزء الأسس العلمية:</p>
-        <ul>
-            <li>مفاهيم بيئات التعلم الافتراضية وتطورها التاريخي.</li>
-            <li>أسباب الاستخدام، الوظائف، والخصائص.</li>
-            <li>المميزات والسلبيات، أنواع البيئات ونماذج التطبيق.</li>
-            <li>تأمين الخصوصية وما يستجد من موضوعات.</li>
-        </ul>
-    </div>
+    <div id="main-content">
+        <header>
+            <h1 id="welcome-title">بيئات التعلم الافتراضية</h1>
+            <p>مقرر تفاعلي شامل</p>
+        </header>
 
-    <div class="content-box">
-        <span class="tag" style="background: var(--secondary);">المحتوى العملي</span>
-        <p>التدريب التطبيقي على المهارات التالية:</p>
-        <ul>
-            <li>استخدام الأدوات المتاحة في البيئات الافتراضية.</li>
-            <li>التعامل مع بيئات مفتوحة المصدر (Moodle, Blackboard).</li>
-            <li>تصميم وتطوير المواد التعليمية للبيئات الافتراضية.</li>
-        </ul>
-    </div>
-</div>
-
-<div id="activities" class="content-section">
-    <h2 style="text-align: center; color: var(--primary);">أنشطة المقرر</h2>
-    <div class="cards-grid">
-        <div class="card">
-            <h3>🛠️ أنشطة التصميم والتطوير</h3>
-            <ul>
-                <li><strong>تصميم سيناريو:</strong> سيناريوهات تعليمية بأسلوب التلعيب.</li>
-                <li><strong>إنشاء بيئة تلعيب:</strong> بيئة كاملة تعتمد على اللعب.</li>
-                <li><strong>تطوير محتوى:</strong> إنتاج فيديوهات وأيقونات تفاعلية.</li>
-            </ul>
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="showSection('goals')">🎯 الأهداف</button>
+            <button class="nav-btn" onclick="showSection('content')">📚 المحتوى</button>
+            <button class="nav-btn" onclick="showSection('activities')">💡 الأنشطة</button>
+            <button class="nav-btn" onclick="showSection('quiz')">📝 الاختبار</button>
         </div>
-        <div class="card">
-            <h3>🤝 أنشطة التنفيذ والتفاعل</h3>
-            <ul>
-                <li><strong>كسر الجمود:</strong> مشاركة قصص شخصية.</li>
-                <li><strong>المناقشات:</strong> منتديات وغرف دراسة.</li>
-                <li><strong>Serious Games:</strong> دمج ألعاب لأغراض تعليمية.</li>
-                <li><strong>المحاكاة:</strong> تمثيل أدوار وسيناريوهات مهنية.</li>
-            </ul>
+
+        <div id="goals" class="content-section active-section">
+            <div class="card">
+                <h3>أهداف المقرر</h3>
+                <ul>
+                    <li>محاكاة التجارب الخطيرة والمعقدة.</li>
+                    <li>توفير تجارب غنية وواقعية.</li>
+                    <li>تخصيص التعلم وتجاوز القيود الجغرافية.</li>
+                </ul>
+            </div>
         </div>
-        <div class="card">
-            <h3>📊 أنشطة التقييم</h3>
-            <ul>
-                <li>اختبارات تحصيلية.</li>
-                <li>بطاقات ملاحظة للأداء المهاري.</li>
-                <li>مقاييس للدافعية والاستمتاع.</li>
-            </ul>
+
+        <div id="content" class="content-section">
+            <div class="card">
+                <h3>المحتوى النظري</h3>
+                <p>مفاهيم بيئات التعلم الافتراضية، التطور التاريخي، ومميزات وسلبيات الاستخدام.</p>
+            </div>
+            <div class="card">
+                <h3>المحتوى العملي</h3>
+                <p>التدريب على Moodle و Blackboard وتصميم المواد التعليمية.</p>
+            </div>
+        </div>
+
+        <div id="activities" class="content-section">
+            <div class="card">
+                <h3>أنشطة تفاعلية</h3>
+                <ul>
+                    <li>تصميم سيناريو تعليمي (Gamification).</li>
+                    <li>المناقشات الجماعية وكسر الجمود.</li>
+                    <li>الألعاب التعليمية (Serious Games).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="quiz" class="content-section">
+            <div class="quiz-container">
+                <h3 style="text-align: center;">اختبار المقرر</h3>
+                <form id="quizForm"></form>
+                <button class="btn-next" onclick="calculateScore()" style="margin-top: 20px;">تصحيح الإجابة</button>
+                <div id="resultBox" class="result-box"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="quiz" class="content-section">
-    <h2 style="text-align: center; color: var(--primary);">اختبار المعلومات</h2>
-    <div class="quiz-container">
-        <form id="quizForm">
-            </form>
-        <button class="submit-btn" onclick="calculateScore()">تصحيح الاختبار</button>
-        <div id="resultBox" class="result-box"></div>
-    </div>
-</div>
+    <script>
+        // 1. كود الانتقال من الدخول للمحتوى
+        function startLearning() {
+            const name = document.getElementById('studentName').value;
+            const email = document.getElementById('studentEmail').value;
 
-<script>
-    // 1. كود التنقل بين التبويبات
-    function showSection(sectionId) {
-        // إخفاء كل الأقسام
-        document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
-        // إزالة التنشيط من كل الأزرار
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        
-        // إظهار القسم المطلوب وتنشيط الزر
-        document.getElementById(sectionId).classList.add('active-section');
-        event.currentTarget.classList.add('active');
-    }
-
-    // 2. كود الاختبار (بيانات الأسئلة)
-    const questions = [
-        {
-            text: "يمثل خصائص اعتماد التعليم الإلكتروني على التفاعل بين المعلم والطلاب.",
-            type: "tf", // صح أو خطأ
-            correct: "true" // افترضنا صح بناء على السياق، يرجى المراجعة
-        },
-        {
-            text: "يعتبر .............. من أدوات التعليم الإلكتروني المستخدمة في التعليم الإلكتروني المتزامن.",
-            type: "mcq",
-            options: ["البريد الالكتروني", "القوائم البريدية", "الاقراص المدمجة", "الفصول الافتراضية"],
-            correct: 3 // الفصول الافتراضية
-        },
-        {
-            text: "يسمى النموذج الخالص للتعليم الإلكتروني بالنموذج المكمل.",
-            type: "tf",
-            correct: "false" // خطأ (المكمل هو المزيج/المدمج وليس الخالص)
-        },
-        {
-            text: "كل مما يلي من منصات الفصول الافتراضية عدا..................",
-            type: "mcq",
-            options: ["Dream weaver", "Web ex", "Teams", "Zoom"],
-            correct: 0 // Dream weaver
-        },
-        {
-            text: "يتيـح التعليم الإلكتروني فرص لكل الفئات العمرية للحصول على الخدمات التعليمية.",
-            type: "tf",
-            correct: "true"
-        },
-        {
-            text: "كل مما يلي من أجهزة قراءة الكتاب الإلكتروني عدا........",
-            type: "mcq",
-            options: ["القارئات اليدوية", "القارئات المحمولة", "الاقلام الضوئية", "الاجهزة المكتبية"],
-            correct: 2 // الاقلام الضوئية (جهاز إدخال وليس عرض)
-        },
-        {
-            text: "تحتاج المتاحف الافتراضية إلى تكلفة عالية ولذلك يصعب تطوير وتحديث.",
-            type: "tf",
-            correct: "false" // المتاحف الافتراضية عادة أقل تكلفة من الواقعية وأسهل في التحديث
-        },
-        {
-            text: "يقوم المعرض الافتراضي بترجمة جوهر الأشياء المادية المقدمة في العالم الرقمي.",
-            type: "tf",
-            correct: "true"
-        },
-        {
-            text: "يوصف الفصل الافتراضي بأنه فصل بكل المكونات، والعناصر المتعارف عليها، لكن بدون وجود مكان واقعي.",
-            type: "tf",
-            correct: "true"
-        },
-        {
-            text: "يتم تحديد الوزارات والمؤسسات التي تُطبيق التعليم الإلكتروني وذلك لإدخاله في المؤسسة التعليمية.",
-            type: "tf",
-            correct: "true"
-        },
-        {
-            text: "تُقدم بيئة التعلم التكيفية المحتوى بطريقة واحدة مدعمة بالوسائط المتعددة.",
-            type: "tf",
-            correct: "false" // التكيفية تقدم طرق مختلفة حسب كل طالب
-        },
-        {
-            text: "يتطلب بناء بيئة التعلم التكيفية استخدام أساليب الذكاء الاصطناعي للتنبؤ بسلوكيات الطالب.",
-            type: "tf",
-            correct: "true"
-        },
-        {
-            text: "يحصل المتعلم في التعليم الإلكتروني غير المباشر على محتويات تعليمية وقتما، وأينما أراد.",
-            type: "tf",
-            correct: "true"
-        }
-    ];
-
-    // دالة بناء الاختبار عند تحميل الصفحة
-    const quizForm = document.getElementById('quizForm');
-    questions.forEach((q, index) => {
-        let html = `<div class="question-box"><span class="question-text">${index + 1}. ${q.text}</span><div class="options">`;
-        
-        if (q.type === 'tf') {
-            html += `
-                <label><input type="radio" name="q${index}" value="true"> صح ✅</label>
-                <label><input type="radio" name="q${index}" value="false"> خطأ ❌</label>
-            `;
-        } else {
-            q.options.forEach((opt, optIndex) => {
-                html += `<label><input type="radio" name="q${index}" value="${optIndex}"> ${opt}</label>`;
-            });
-        }
-        html += `</div></div>`;
-        quizForm.innerHTML += html;
-    });
-
-    // دالة حساب النتيجة
-    function calculateScore() {
-        let score = 0;
-        const formData = new FormData(quizForm);
-        
-        questions.forEach((q, index) => {
-            const userAnswer = formData.get(`q${index}`);
-            // مقارنة الإجابة (تحويل الرقم لنص للمقارنة الآمنة)
-            if (userAnswer === String(q.correct)) {
-                score++;
-                // تلوين السؤال الصحيح (اختياري)
-                document.querySelectorAll('.question-box')[index].style.background = "#e6fffa";
-            } else {
-                document.querySelectorAll('.question-box')[index].style.background = "#fff5f5";
+            if (name.trim() === "" || email.trim() === "") {
+                document.getElementById('error-msg').style.display = 'block';
+                return;
             }
+
+            // إخفاء شاشة الدخول وإظهار المحتوى
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            
+            // ترحيب باسم الطالب
+            document.getElementById('welcome-title').innerText = "أهلاً بك يا " + name;
+        }
+
+        // 2. كود التنقل بين التبويبات
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(d => d.classList.remove('active-section'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active-section');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 3. كود الاختبار
+        const questions = [
+            { text: "يعتمد التعليم الإلكتروني على التفاعل بين المعلم والطلاب.", correct: "true", type: "tf" },
+            { text: "من أدوات التعليم المتزامن:", options: ["البريد", "الفصول الافتراضية", "الأقراص"], correct: 1, type: "mcq" },
+            { text: "النموذج الخالص يسمى بالنموذج المكمل.", correct: "false", type: "tf" },
+            { text: "تساعد المتاحف الافتراضية في خفض التكلفة.", correct: "true", type: "tf" }
+        ];
+
+        const quizForm = document.getElementById('quizForm');
+        questions.forEach((q, i) => {
+            let html = `<div class="question-box"><p>${i+1}. ${q.text}</p><div class="options">`;
+            if(q.type === 'tf') {
+                html += `<label><input type="radio" name="q${i}" value="true"> صح</label>
+                         <label><input type="radio" name="q${i}" value="false"> خطأ</label>`;
+            } else {
+                q.options.forEach((opt, idx) => html += `<label><input type="radio" name="q${i}" value="${idx}"> ${opt}</label>`);
+            }
+            quizForm.innerHTML += html + "</div></div>";
         });
 
-        const resultBox = document.getElementById('resultBox');
-        resultBox.style.display = 'block';
-        
-        // رسالة النتيجة
-        if (score >= questions.length / 2) {
-            resultBox.className = 'result-box pass';
-            resultBox.innerHTML = `أحسنت! نتيجتك هي ${score} من ${questions.length}`;
-        } else {
-            resultBox.className = 'result-box fail';
-            resultBox.innerHTML = `حاول مرة أخرى. نتيجتك هي ${score} من ${questions.length}`;
+        function calculateScore() {
+            let score = 0;
+            const data = new FormData(quizForm);
+            questions.forEach((q, i) => {
+                if(data.get(`q${i}`) === String(q.correct)) score++;
+            });
+            const res = document.getElementById('resultBox');
+            res.style.display = 'block';
+            res.className = score >= 2 ? 'result-box pass' : 'result-box fail';
+            res.innerText = `نتيجتك: ${score} من ${questions.length}`;
         }
-        
-        // التمرير لأسفل لرؤية النتيجة
-        resultBox.scrollIntoView({behavior: "smooth"});
-    }
-</script>
-
+    </script>
 </body>
 </html>
